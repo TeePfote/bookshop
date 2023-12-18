@@ -46,13 +46,13 @@ export default {
 
       ],
       imageSrc: [
-        "/assets/book1.jpg",
-        "/assets/book2.jpg",
-        "/assets/book3.jpg",
-        "/assets/book4.jpg",
-        "/assets/book5.jpg",
-        "/assets/book6.jpg",
-        "/assets/book7.jpg",
+        "/images/book1.jpg",
+        "/images/book2.jpg",
+        "/images/book3.jpg",
+        "/images/book4.jpg",
+        "/images/book5.jpg",
+        "/images/book6.jpg",
+        "/images/book7.jpg",
       ]
     };
   },
