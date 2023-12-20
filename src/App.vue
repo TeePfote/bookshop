@@ -9,7 +9,8 @@
         </button>
         <shopping-cart
             :items="cartItems"
-            v-if="showShoppingCart" />
+            v-if="showShoppingCart"
+            @clear-cart="clearCart"/>
       </div>
     </div>
     <div class="card-container d-flex justify-content-center">
@@ -79,6 +80,9 @@ export default {
       this.cartItems.push(book);
       // Add any additional logic here (e.g., update total, show confirmation)
       console.log(`${book.title} added to cart!`);
+    },
+    clearCart() {
+      this.cartItems = [];
     },
   },
 };

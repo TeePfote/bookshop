@@ -5,6 +5,7 @@
     <ul>
       <li v-for="(item, index) in items" :key="index">{{ item.title }}</li>
     </ul>
+    <button class="btn btn-danger" @click="clearCart">Clear Cart</button>
   </div>
 </template>
 
@@ -12,6 +13,11 @@
 export default {
   props: {
     items: Array,
+  },
+  methods: {
+    clearCart() {
+      this.$emit("clear-cart");
+    },
   },
 };
 </script>
@@ -23,8 +29,8 @@ export default {
   top: 5%; /* Adjust the distance from the top */
   right: 2%; /* Adjust the distance from the right */
   border: 1px solid #ccc;
-  border-radius: 20px;
-  padding: 10px;
+  border-radius: 15px;
+  padding: 15px;
   z-index: 1;
 }
 
@@ -35,5 +41,9 @@ ul {
 
 li {
   margin-bottom: 10px;
+}
+
+.btn-danger {
+  margin-top: 10px; /* Adjust the margin as needed */
 }
 </style>
