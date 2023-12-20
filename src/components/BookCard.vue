@@ -22,8 +22,12 @@ export default {
   },
   methods: {
     addToCart() {
-      // Add your logic for adding to the shopping cart
-      alert("Added to Shopping Cart!");
+      // Emit the add-to-cart event with the book information
+      this.$emit("add-to-cart", {
+        title: this.title,
+        description: this.description,
+        imageSrc: this.imageSrc,
+      });
     },
     comingSoon() {
       alert("Coming Soon!");
