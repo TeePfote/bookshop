@@ -23,9 +23,9 @@
       <book-card
           v-for="(title, index) in filteredBookTitles"
           :key="index"
-          :title="title"
-          :description="bookDescriptions[index]"
-          :image-src="imageSrc[index]"
+          :title="title.title"
+          :description="title.description"
+          :image-src="title.imageSrc"
           @add-to-cart="addToCart"
       />
     </div>
@@ -44,34 +44,14 @@ export default {
   },
   data() {
     return {
-      bookTitles: [
-        "To Kill a Mockingbird",
-        "1984",
-        "The Great Gatsby",
-        "Harry Potter and the Sorcerer's Stone",
-        "The Catcher in the Rye",
-        "The Hobbit",
-        "Coming soon",
-
-      ],
-      bookDescriptions: [
-        "Classic novel by Harper Lee.",
-        "Dystopian novel by George Orwell.",
-        "F. Scott Fitzgerald's masterpiece.",
-        "Fantasy novel by J.K. Rowling.",
-        "J.D. Salinger's classic coming-of-age novel.",
-        "Fantasy novel by J.R.R. Tolkien.",
-        "Coming soon",
-
-      ],
-      imageSrc: [
-        "/images/book1.jpg",
-        "/images/book2.jpg",
-        "/images/book3.jpg",
-        "/images/book4.jpg",
-        "/images/book5.jpg",
-        "/images/book6.jpg",
-        "/images/book7.jpg",
+      books: [
+        { title: "To Kill a Mockingbird", description: "Classic novel by Harper Lee.", imageSrc: "/images/book1.jpg" },
+        { title: "1984", description: "Dystopian novel by George Orwell.", imageSrc: "/images/book2.jpg" },
+        { title: "The Great Gatsby", description: "F. Scott Fitzgerald's masterpiece.", imageSrc: "/images/book3.jpg" },
+        { title: "Harry Potter and the Sorcerer's Stone", description: "Fantasy novel by J.K. Rowling.", imageSrc: "/images/book4.jpg" },
+        { title: "The Catcher in the Rye", description: "J.D. Salinger's classic coming-of-age novel.", imageSrc: "/images/book5.jpg" },
+        { title: "The Hobbit", description: "Fantasy novel by J.R.R. Tolkien.", imageSrc: "/images/book6.jpg" },
+        { title: "Coming soon", description: "Coming soon", imageSrc: "/images/book7.jpg" },
       ],
       showShoppingCart: false,
       cartItems: [],
@@ -79,10 +59,10 @@ export default {
     };
   },
   computed: {
-    // Computed property to filter book titles based on the search query
+    // Computed property to filter books based on the search query
     filteredBookTitles() {
-      return this.bookTitles.filter((title) =>
-          title.toLowerCase().includes(this.searchQuery.toLowerCase())
+      return this.books.filter((book) =>
+          book.title.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
     },
   },
