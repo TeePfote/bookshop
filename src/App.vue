@@ -90,6 +90,7 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100vh;
+  width: 100%;
 }
 
 .header-container {
@@ -108,6 +109,7 @@ export default {
   margin-top: 10px;
   flex-wrap: wrap;
   overflow-y: auto;
+  /* height: 100%; */
 }
 
 .h1 {
