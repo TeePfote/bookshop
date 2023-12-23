@@ -1,20 +1,29 @@
 <!-- ShoppingCart.vue -->
 <template>
   <div class="shopping-cart">
-    <h2>Shopping Cart</h2>
-    <ul>
-      <li v-for="(item, index) in groupedItems" :key="index">
-        <button class="btn btn-sm btn-danger" @click="decrementCount(index)">
-          <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13H5v-2h14v2z"/></svg>
-        </button>
-        <span class="count">{{ item.count }}</span>
-        <button class="btn btn-sm btn-success" @click="incrementCount(index)">
-          <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13H13v6h-2v-6H5v-2h6V5h2v6h6z"/></svg>
-        </button>
-        {{ item.title }}
-      </li>
-    </ul>
-    <button class="btn btn-danger" @click="clearCart">Clear Cart</button>
+    <div>
+      <h2>Shopping Cart</h2>
+      <ul>
+        <li v-for="(item, index) in groupedItems" :key="index">
+          <button class="btn btn-sm btn-danger" @click="decrementCount(index)">
+            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 13H5v-2h14v2z"/>
+            </svg>
+          </button>
+          <span class="count">{{ item.count }}</span>
+          <button class="btn btn-sm btn-success" @click="incrementCount(index)">
+            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 13H13v6h-2v-6H5v-2h6V5h2v6h6z"/>
+            </svg>
+          </button>
+          {{ item.title }}
+        </li>
+      </ul>
+    </div>
+    <div class="flex-row">
+      <button class="btn btn-danger" @click="clearCart">Clear Cart</button>
+      <button class="btn btn-primary">Checkout</button>
+    </div>
   </div>
 </template>
 
@@ -71,13 +80,15 @@ export default {
 
 <style scoped>
 .shopping-cart {
-  position: absolute;
-  top: 5%; /* Adjust the distance from the top */
-  right: 2%; /* Adjust the distance from the right */
   border: 1px solid #ccc;
   border-radius: 15px;
   padding: 15px;
   z-index: 1;
+  width: 20vw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 ul {
