@@ -5,6 +5,7 @@
     <div class="card-body">
       <h5 class="card-title">{{ title }}</h5>
       <p class="card-text">{{ description }}</p>
+      <p class="card-text">{{ price }}$</p>
       <div class="d-flex justify-content-between align-items-center">
         <a href="#" class="btn btn-primary" @click="comingSoon" >Read more</a>
         <button class="btn btn-success" @click="addToCart">Add to Cart</button>
@@ -19,6 +20,7 @@ export default {
     title: String,
     description: String,
     imageSrc: String,
+    price: Number,
   },
   methods: {
     addToCart() {
@@ -27,6 +29,7 @@ export default {
         title: this.title,
         description: this.description,
         imageSrc: this.imageSrc,
+        price: this.price,
       });
     },
     comingSoon() {
