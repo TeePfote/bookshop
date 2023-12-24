@@ -5,13 +5,13 @@
       <h2>Shopping Cart</h2>
       <ul>
         <li v-for="(item, index) in groupedItems" :key="index">
-          <button class="btn btn-sm btn-danger" @click="decrementCount(index)">
+          <button class="btn btn-sm btn-danger" @click="decrementCount(item)">
             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M19 13H5v-2h14v2z"/>
             </svg>
           </button>
           <span class="count">{{ item.count }}</span>
-          <button class="btn btn-sm btn-success" @click="incrementCount(index)">
+          <button class="btn btn-sm btn-success" @click="incrementCount(item)">
             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M19 13H13v6h-2v-6H5v-2h6V5h2v6h6z"/>
             </svg>
@@ -66,13 +66,11 @@ export default {
     clearCart() {
       this.$emit("clear-cart");
     },
-    decrementCount(index) {
-      if (this.groupedItems[index].count > 1) {
-        this.groupedItems[index].count -= 1;
-      }
+    decrementCount(item) {
+      this.$emit("decrement-count", item);
     },
-    incrementCount(index) {
-      this.groupedItems[index].count += 1;
+    incrementCount(item) {
+      this.$emit("increment-count", item);
     },
   },
 };

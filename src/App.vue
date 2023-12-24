@@ -29,7 +29,10 @@
       <shopping-cart
           :items="cartItems"
           v-if="showShoppingCart"
-          @clear-cart="clearCart"/>
+          @clear-cart="clearCart"
+          @increment-count="incrementCount"
+          @decrement-count="decrementCount"
+      />
     </div>
   </div>
 </template>
@@ -79,6 +82,23 @@ export default {
     },
     clearCart() {
       this.cartItems = [];
+    },
+    decrementCount(item) {
+      // Find the first item that has the same title, description, and image source
+      const index = this.cartItems.findIndex(
+          (cartItem) =>
+              cartItem.title === item.title &&
+              cartItem.description === item.description &&
+              cartItem.imageSrc === item.imageSrc
+      );
+      // Remove if item is not null
+      if (index !== -1) {
+        this.cartItems.splice(index, 1);
+      }
+    },
+    incrementCount(item) {
+      this.cartItems.push(item);
+      console.log(`${item.title} added to cart!`);
     },
   },
 };
