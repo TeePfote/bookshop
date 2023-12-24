@@ -42,6 +42,7 @@
 import BookCard from "@/components/BookCard.vue";
 import ShoppingCart from "@/components/ShoppingCart.vue";
 
+
 export default {
   name: "App",
   components: {
@@ -50,19 +51,14 @@ export default {
   },
   data() {
     return {
-      books: [
-        { title: "To Kill a Mockingbird", description: "Classic novel by Harper Lee.", imageSrc: "/images/book1.jpg", price: "10.99" },
-        { title: "1984", description: "Dystopian novel by George Orwell.", imageSrc: "/images/book2.jpg", price: "8.99" },
-        { title: "The Great Gatsby", description: "F. Scott Fitzgerald's masterpiece.", imageSrc: "/images/book3.jpg", price: "9.99" },
-        { title: "Harry Potter and the Sorcerer's Stone", description: "Fantasy novel by J.K. Rowling.", imageSrc: "/images/book4.jpg", price: "14.99" },
-        { title: "The Catcher in the Rye", description: "J.D. Salinger's classic coming-of-age novel.", imageSrc: "/images/book5.jpg", price: "9.99" },
-        { title: "The Hobbit", description: "Fantasy novel by J.R.R. Tolkien.", imageSrc: "/images/book6.jpg", price: "14.99" },
-        { title: "Coming soon", description: "Coming soon", imageSrc: "/images/book7.jpg", price: "19.99" },
-      ],
+      books: [], // books from JSON file
       showShoppingCart: false,
       cartItems: [],
       searchQuery: "", // New data property for search query
     };
+  },
+  mounted() {
+    this.importBooksFromJson();
   },
   computed: {
     // Computed property to filter books based on the search query
@@ -73,6 +69,14 @@ export default {
     },
   },
   methods: {
+    async importBooksFromJson() {
+      try {
+        const response = await fetch('/books.json'); // Replace with the actual path
+        this.books = await response.json();
+      } catch (error) {
+        console.error('Error importing books:', error);
+      }
+    },
     toggleShoppingCart() {
       this.showShoppingCart = !this.showShoppingCart;
     },
