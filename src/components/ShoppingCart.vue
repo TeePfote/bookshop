@@ -21,6 +21,7 @@
       </ul>
     </div>
     <div class="flex-row">
+      <h3>Total: {{ totalPrice }}$</h3>
       <button class="btn btn-danger" @click="clearCart">Clear Cart</button>
       <button class="btn btn-primary">Checkout</button>
     </div>
@@ -40,7 +41,7 @@ export default {
 
       // Count occurrences of each item
       this.items.forEach((item) => {
-        const key = `${item.title}-${item.description}-${item.imageSrc}`;
+        const key = `${item.title}-${item.description}-${item.imageSrc}-${item.price}`;
         if (itemMap.has(key)) {
           itemMap.set(key, itemMap.get(key) + 1);
         } else {
@@ -50,16 +51,24 @@ export default {
 
       // Create an array of grouped items with counts
       itemMap.forEach((count, key) => {
-        const [title, description, imageSrc] = key.split('-');
+        const [title, description, imageSrc, price] = key.split('-');
         grouped.push({
           title,
           description,
           imageSrc,
+          price,
           count,
         });
       });
 
       return grouped;
+    },
+    // Computed property to calculate the total price
+    totalPrice() {
+      return this.groupedItems.reduce(
+          (total, item) => total + parseFloat(item.price) * item.count,
+          0
+      );
     },
   },
   methods: {

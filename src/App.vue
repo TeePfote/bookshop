@@ -55,6 +55,7 @@ export default {
       showShoppingCart: false,
       cartItems: [],
       searchQuery: "", // New data property for search query
+      totalPrice: 0,
     };
   },
   mounted() {
@@ -84,9 +85,16 @@ export default {
       this.cartItems.push(book);
       // Add any additional logic here (e.g., update total, show confirmation)
       console.log(`${book.title} added to cart!`);
+      const priceAsNumber = parseFloat(book.price);
+      this.totalPrice += priceAsNumber;
+      console.log(this.totalPrice);
+      return this.totalPrice;
     },
     clearCart() {
       this.cartItems = [];
+      this.totalPrice = 0;
+      console.log(this.totalPrice);
+      return this.totalPrice;
     },
     decrementCount(item) {
       // Find the first item that has the same title, description, and image source
@@ -99,11 +107,25 @@ export default {
       // Remove if item is not null
       if (index !== -1) {
         this.cartItems.splice(index, 1);
+        const priceAsNumber = parseFloat(item.price);
+        this.totalPrice -= priceAsNumber;
+        console.log(this.totalPrice);
+        return this.totalPrice;
+      }
+      else {
+        const priceAsNumber = parseFloat(item.price);
+        this.totalPrice -= priceAsNumber;
+        console.log(this.totalPrice);
+        return this.totalPrice;
       }
     },
     incrementCount(item) {
       this.cartItems.push(item);
       console.log(`${item.title} added to cart!`);
+      const priceAsNumber = parseFloat(item.price);
+      this.totalPrice += priceAsNumber;
+      console.log(this.totalPrice)
+      return this.totalPrice;
     },
   },
 };
