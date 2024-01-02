@@ -21,6 +21,7 @@
       </ul>
     </div>
     <div class="flex-row">
+      <h3>Books: {{ bookCount }}</h3>
       <h3>Total: {{ totalPrice }}$</h3>
       <button class="btn btn-danger" @click="clearCart">Clear Cart</button>
       <button class="btn btn-primary">Checkout</button>
@@ -69,6 +70,10 @@ export default {
           (total, item) => total + parseFloat(item.price) * item.count,
           0
       );
+    },
+    // Count books in the cart
+    bookCount() {
+      return this.items.length;
     },
   },
   methods: {
