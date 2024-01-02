@@ -9,15 +9,17 @@
           <input type="text" v-model="searchQuery" class="form-control" placeholder="Search books..." />
         </div>
         <!-- Login button -->
-        <button class="btn btn-primary" @click="adminLogin">Login</button>
+        <button class="btn btn-primary" @click="toggleLogin">Login</button>
         <!-- Shopping cart button -->
         <button class="btn btn-primary" @click="toggleShoppingCart">
           <svg xmlns="http://www.w3.org/2000/svg" height="16" width="18" viewBox="0 0 576 512" fill="#FFFFFF"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>
         </button>
       </div>
-      <!-- Book cards -->
+      <!-- Book cards, Login component, or Success message -->
       <div class="card-container d-flex justify-content-center">
+        <!-- Conditionally render Book cards or Login component based on loggedIn property -->
         <book-card
+            v-if="!login"
             v-for="(title, index) in filteredBookTitles"
             :key="index"
             :title="title.title"
@@ -26,7 +28,13 @@
             :price="title.price"
             @add-to-cart="addToCart"
         />
+        <login
+            v-else
+            @login-success="loginSuccess"
+        />
       </div>
+      <!-- Show success message when logged in -->
+      <p v-if="loggedIn">Logged in successfully!</p>
     </div>
     <!-- Shopping Cart -->
     <div class="cart-container">
@@ -44,6 +52,7 @@
 <script>
 import BookCard from "@/components/BookCard.vue";
 import ShoppingCart from "@/components/ShoppingCart.vue";
+import Login from "@/components/Login.vue";
 
 
 export default {
@@ -51,6 +60,7 @@ export default {
   components: {
     BookCard,
     ShoppingCart,
+    Login,
   },
   data() {
     return {
@@ -59,6 +69,8 @@ export default {
       cartItems: [],
       searchQuery: "", // New data property for search query
       totalPrice: 0,
+      login: false, // Add loggedIn property
+      loggedIn: false,
     };
   },
   mounted() {
@@ -81,8 +93,12 @@ export default {
         console.error('Error importing books:', error);
       }
     },
-    adminLogin() {
-      alert("Coming Soon!");
+    toggleLogin() {
+      this.login = !this.login;
+    },
+    loginSuccess() {
+      this.loggedIn = true;
+      console.log("Logged in successfully!"); // Log the success message
     },
     toggleShoppingCart() {
       this.showShoppingCart = !this.showShoppingCart;
