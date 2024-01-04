@@ -75,7 +75,7 @@ export default {
   methods: {
     async importBooksFromJson() {
       try {
-        const response = await fetch('/books.json'); // Replace with the actual path
+        const response = await fetch('https://ivm108.informatik.htw-dresden.de/ewa/g14/daten/db_connection.php'); // Replace with the actual path
         this.books = await response.json();
       } catch (error) {
         console.error('Error importing books:', error);
