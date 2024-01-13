@@ -21,9 +21,14 @@
       </div>
       <!-- Book cards, Login component, or Success message -->
       <div class="card-container d-flex justify-content-center">
+        <!-- Show success message when logged in -->
+        <div v-if="loggedIn">
+          <h2>Logged in successfully!</h2>
+          <pre>{{ JSON.stringify(books, null, 2).slice(1, -1).replace(/"([^"]+)"/g, '$1').replace(/[{},]/g, '').replace(/,/g, ',\n') }}</pre>
+        </div>
         <!-- Conditionally render Book cards or Login component based on loggedIn property -->
         <book-card
-            v-if="!login"
+            v-if="!login && !loggedIn"
             v-for="(title, index) in filteredBookTitles"
             :key="index"
             :title="title.title"
@@ -34,11 +39,9 @@
             :stockCount="title.stockCount"
             @add-to-cart="addToCart" />
         <login
-            v-else
+            v-else-if="login && !loggedIn"
             @login-success="loginSuccess" />
       </div>
-      <!-- Show success message when logged in -->
-      <p v-if="loggedIn">Logged in successfully!</p>
     </div>
     <!-- Shopping Cart -->
     <div class="cart-container">
