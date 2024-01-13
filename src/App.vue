@@ -191,8 +191,12 @@ export default {
       console.log(books);
       const payload = encodeURIComponent(JSON.stringify(books));
       console.log(payload);
-      const redirectURL = `https://ivm108.informatik.htw-dresden.de/ewa/g14/daten/Standalone_stripe_redirect.php?payload=${payload}`;
-      window.location.href = redirectURL;
+      if (books.length === 0) {
+        alert("Please add items to your cart before proceeding to checkout!");
+      }
+      else {
+        window.location.href = `https://ivm108.informatik.htw-dresden.de/ewa/g14/daten/Standalone_stripe_redirect.php?payload=${payload}`;
+      }
     },
   }
 };

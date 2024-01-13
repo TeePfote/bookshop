@@ -88,7 +88,7 @@ export default {
     incrementCount(item) {
       this.$emit("increment-count", item);
     },
-    redirectStripe(item) {
+    redirectStripe() {
       this.$emit("redirect-stripe");
     },
   },
