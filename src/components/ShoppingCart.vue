@@ -42,7 +42,7 @@ export default {
 
       // Count occurrences of each item
       this.items.forEach((item) => {
-        const key = `${item.title}-${item.description}-${item.imageSrc}-${item.price}-${item.priceID}-${item.stockCount}`;
+        const key = `${item.title}-${item.description}-${item.imageSrc}-${item.price}-${item.priceID}`;
         if (itemMap.has(key)) {
           itemMap.set(key, itemMap.get(key) + 1);
         } else {
@@ -52,14 +52,13 @@ export default {
 
       // Create an array of grouped items with counts
       itemMap.forEach((count, key) => {
-        const [title, description, imageSrc, price, priceID, stockCount] = key.split('-');
+        const [title, description, imageSrc, price, priceID] = key.split('-');
         grouped.push({
           title,
           description,
           imageSrc,
           price,
           priceID,
-          stockCount,
           count,
         });
       });

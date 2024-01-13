@@ -36,7 +36,6 @@
             :image-src="title.imageSrc"
             :price="title.price"
             :priceID="title.priceID"
-            :stockCount="title.stockCount"
             @add-to-cart="addToCart" />
         <login
             v-else-if="login && !loggedIn"
@@ -112,7 +111,6 @@ export default {
     },
     addToCart(book) {
       this.cartItems.push(book);
-      // Add any additional logic here (e.g., update total, show confirmation)
       console.log(`${book.title} added to cart!`);
       const priceAsNumber = parseFloat(book.price);
       this.totalPrice += priceAsNumber;
