@@ -22,17 +22,33 @@
       <!-- Book cards, Login component, or Success message -->
       <div class="card-container d-flex justify-content-center">
         <!-- Conditionally render Book cards or Login component based on loggedIn property -->
-        <book-card v-if="!login" v-for="(title, index) in filteredBookTitles" :key="index" :title="title.title"
-          :description="title.description" :image-src="title.imageSrc" :price="title.price" @add-to-cart="addToCart" />
-        <login v-else @login-success="loginSuccess" />
+        <book-card
+            v-if="!login"
+            v-for="(title, index) in filteredBookTitles"
+            :key="index"
+            :title="title.title"
+            :description="title.description"
+            :image-src="title.imageSrc"
+            :price="title.price"
+            :priceID="title.priceID"
+            :stockCount="title.stockCount"
+            @add-to-cart="addToCart" />
+        <login
+            v-else
+            @login-success="loginSuccess" />
       </div>
       <!-- Show success message when logged in -->
       <p v-if="loggedIn">Logged in successfully!</p>
     </div>
     <!-- Shopping Cart -->
     <div class="cart-container">
-      <shopping-cart :items="cartItems" v-if="showShoppingCart" @clear-cart="clearCart" @increment-count="incrementCount"
-        @decrement-count="decrementCount" />
+      <shopping-cart
+          :items="cartItems"
+          v-if="showShoppingCart"
+          @clear-cart="clearCart"
+          @increment-count="incrementCount"
+          @decrement-count="decrementCount"
+          @redirect-stripe="redirectStripe" />
     </div>
   </div>
 </template>
@@ -112,7 +128,8 @@ export default {
         (cartItem) =>
           cartItem.title === item.title &&
           cartItem.description === item.description &&
-          cartItem.imageSrc === item.imageSrc
+          cartItem.imageSrc === item.imageSrc &&
+          cartItem.priceID === item.priceID
       );
       // Remove if item is not null
       if (index !== -1) {
@@ -137,8 +154,49 @@ export default {
       console.log(this.totalPrice)
       return this.totalPrice;
     },
-  },
+    redirectStripe() {
+
+      let books = this.cartItems;
+      let bookCount = {};
+
+      books.forEach(book => {
+        const { title } = book;
+        if (bookCount[title]) {
+          bookCount[title]++;
+        } else {
+          bookCount[title] = 1;
+        }
+      });
+
+      // Update quantity field in the original array
+      books.forEach(book => {
+        const { title } = book;
+        if (bookCount[title] >= 1) {
+          book.quantity = bookCount[title];
+        }
+      });
+
+      // Filter out duplicates from the array
+      books = books.filter((book, index, self) =>
+        index === self.findIndex(b =>
+          b.title === book.title && b.quantity === book.quantity
+        )
+      );
+      console.log(this.cartItems);
+      books = books.map(({ priceID, quantity }) => ({ priceID, quantity }));
+      books = books.map(item => ({
+        priceID: Object.values(item)[0],
+        quantity: Object.values(item)[1],
+      }));
+      console.log(books);
+      const payload = encodeURIComponent(JSON.stringify(books));
+      console.log(payload);
+      const redirectURL = `https://ivm108.informatik.htw-dresden.de/ewa/g14/daten/Standalone_stripe_redirect.php?payload=${payload}`;
+      window.location.href = redirectURL;
+    },
+  }
 };
+
 </script>
 
 <style>

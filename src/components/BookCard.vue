@@ -7,7 +7,7 @@
       <p class="card-text">{{ description }}</p>
       <p class="card-text">{{ price }}$</p>
       <div class="d-flex justify-content-between align-items-center">
-        <a href="#" class="btn btn-primary" @click="comingSoon" >Read more</a>
+        <a href="#" class="btn btn-primary" @click="comingSoon">Read more</a>
         <button class="btn btn-success" @click="addToCart">Add to Cart</button>
       </div>
     </div>
@@ -21,6 +21,8 @@ export default {
     description: String,
     imageSrc: String,
     price: Number,
+    priceID: String,
+    stockCount: Number,
   },
   methods: {
     addToCart() {
@@ -30,6 +32,8 @@ export default {
         description: this.description,
         imageSrc: this.imageSrc,
         price: this.price,
+        priceID: this.priceID,
+        stockCount: this.stockCount,
       });
     },
     comingSoon() {
@@ -42,9 +46,11 @@ export default {
 <style>
 /* You can add custom styles here if needed */
 .card {
-  width: calc(33.33% - 10px); /* Adjust the width and margin between cards as needed */
+  width: calc(33.33% - 10px);
+  /* Adjust the width and margin between cards as needed */
   margin-right: 10px;
-  margin-bottom: 20px; /* Add margin at the bottom for spacing between rows */
+  margin-bottom: 20px;
+  /* Add margin at the bottom for spacing between rows */
 }
 
 .card-body {
@@ -53,15 +59,19 @@ export default {
 }
 
 .card-text {
-  flex: 1; /* Make the description take up all the space it can */
+  flex: 1;
+  /* Make the description take up all the space it can */
 }
 
 .card:last-child {
-  margin-right: 0; /* Remove margin for the last card in each row */
+  margin-right: 0;
+  /* Remove margin for the last card in each row */
 }
 
 .card-img-top {
-  height: 200px; /* Adjust the desired height */
-  object-fit: cover; /* or "contain" based on your preference */
+  height: 200px;
+  /* Adjust the desired height */
+  object-fit: cover;
+  /* or "contain" based on your preference */
 }
 </style>

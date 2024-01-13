@@ -7,13 +7,13 @@
         <li v-for="(item, index) in groupedItems" :key="index">
           <button class="btn btn-sm btn-danger" @click="decrementCount(item)">
             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 13H5v-2h14v2z"/>
+              <path d="M19 13H5v-2h14v2z" />
             </svg>
           </button>
           <span class="count">{{ item.count }}</span>
           <button class="btn btn-sm btn-success" @click="incrementCount(item)">
             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 13H13v6h-2v-6H5v-2h6V5h2v6h6z"/>
+              <path d="M19 13H13v6h-2v-6H5v-2h6V5h2v6h6z" />
             </svg>
           </button>
           {{ item.title }}
@@ -24,7 +24,7 @@
       <h3>Books: {{ bookCount }}</h3>
       <h3>Total: {{ totalPrice }}$</h3>
       <button class="btn btn-danger" @click="clearCart">Clear Cart</button>
-      <button class="btn btn-primary">Checkout</button>
+      <button class="btn btn-primary" @click="redirectStripe">Checkout</button>
     </div>
   </div>
 </template>
@@ -42,7 +42,7 @@ export default {
 
       // Count occurrences of each item
       this.items.forEach((item) => {
-        const key = `${item.title}-${item.description}-${item.imageSrc}-${item.price}`;
+        const key = `${item.title}-${item.description}-${item.imageSrc}-${item.price}-${item.priceID}-${item.stockCount}`;
         if (itemMap.has(key)) {
           itemMap.set(key, itemMap.get(key) + 1);
         } else {
@@ -52,12 +52,14 @@ export default {
 
       // Create an array of grouped items with counts
       itemMap.forEach((count, key) => {
-        const [title, description, imageSrc, price] = key.split('-');
+        const [title, description, imageSrc, price, priceID, stockCount] = key.split('-');
         grouped.push({
           title,
           description,
           imageSrc,
           price,
+          priceID,
+          stockCount,
           count,
         });
       });
@@ -67,8 +69,8 @@ export default {
     // Computed property to calculate the total price
     totalPrice() {
       return this.groupedItems.reduce(
-          (total, item) => total + parseFloat(item.price) * item.count,
-          0
+        (total, item) => total + parseFloat(item.price) * item.count,
+        0
       );
     },
     // Count books in the cart
@@ -85,6 +87,9 @@ export default {
     },
     incrementCount(item) {
       this.$emit("increment-count", item);
+    },
+    redirectStripe(item) {
+      this.$emit("redirect-stripe");
     },
   },
 };
@@ -115,12 +120,15 @@ li {
 }
 
 .count {
-  margin: 0 8px; /* Adjust the margin as needed */
-  font-weight: bold; /* Optional: make the count bold */
+  margin: 0 8px;
+  /* Adjust the margin as needed */
+  font-weight: bold;
+  /* Optional: make the count bold */
 }
 
 .btn-danger,
 .btn-success {
-  margin: 0 4px; /* Adjust the margin as needed */
+  margin: 0 4px;
+  /* Adjust the margin as needed */
 }
 </style>
