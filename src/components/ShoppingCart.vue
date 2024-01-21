@@ -67,10 +67,11 @@ export default {
     },
     // Computed property to calculate the total price
     totalPrice() {
-      return this.groupedItems.reduce(
-        (total, item) => total + parseFloat(item.price) * item.count,
-        0
+      const total = this.groupedItems.reduce(
+          (total, item) => total + parseFloat(item.price) * item.count,
+          0
       );
+      return parseFloat(total.toFixed(2));
     },
     // Count books in the cart
     bookCount() {

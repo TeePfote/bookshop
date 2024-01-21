@@ -46,7 +46,7 @@
     <div class="cart-container">
       <shopping-cart
           :items="cartItems"
-          v-if="showShoppingCart"
+          v-if="showShoppingCart && !login && !loggedIn"
           @clear-cart="clearCart"
           @increment-count="incrementCount"
           @decrement-count="decrementCount"
