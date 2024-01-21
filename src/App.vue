@@ -93,7 +93,17 @@ export default {
   methods: {
     async importBooksFromJson() {
       try {
-        const response = await fetch('https://ivm108.informatik.htw-dresden.de/ewa/g14/daten/db_connection.php'); // Replace with the actual path
+        const myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic ZzE0Omd1NjJjYWQ=");
+
+        const requestOptions = {
+          method: 'GET',
+          headers: myHeaders,
+          redirect: 'follow',
+          cors: 'no-cors'
+        };
+
+        const response = fetch('https://ivm108.informatik.htw-dresden.de/ewa/g14/admin/db_connection.php', requestOptions);
         this.books = await response.json();
       } catch (error) {
         console.error('Error importing books:', error);
