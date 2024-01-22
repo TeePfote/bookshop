@@ -22,8 +22,23 @@
       <!-- Book cards, Login component, or Success message -->
       <div class="card-container d-flex justify-content-center">
         <!-- Show success message when logged in -->
-        <div v-if="loggedIn">
+        <div class="loggedIn-container" v-if="loggedIn">
           <h2>Logged in successfully!</h2>
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Title" v-model="inputTitle"/>
+            <button class="btn btn-sm btn-danger" @click="checkTitleRemove(inputTitle)">
+              <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 13H5v-2h14v2z" />
+              </svg>
+            </button>
+            <button class="btn btn-sm btn-success" @click="checkTitleAdd(inputTitle)">
+              <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 13H13v6h-2v-6H5v-2h6V5h2v6h6z" />
+              </svg>
+            </button>
+          </div>
+          <p v-if="showPartialTitleMessage" class="warning-message">Please enter the full book title.</p>
+          <p>Here are the books:</p>
           <pre class="loggedIn">{{ JSON.stringify(books, null, 2).slice(1, -1).replace(/"([^"]+)"/g, '$1').replace(/[{},]/g, '').replace(/,/g, ',\n') }}</pre>
         </div>
         <!-- Conditionally render Book cards or Login component based on loggedIn property -->
@@ -77,6 +92,7 @@ export default {
       totalPrice: 0,
       login: false, // Add loggedIn property
       loggedIn: false,
+      inputTitle: "",
     };
   },
   mounted() {
@@ -88,6 +104,13 @@ export default {
       return this.books.filter((book) =>
         book.title.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
+    },
+    showPartialTitleMessage() {
+      const isPartialMatch = this.books.some(book =>
+          book.title.toLowerCase().includes(this.inputTitle.toLowerCase()) &&
+          this.inputTitle.toLowerCase() !== book.title.toLowerCase()
+      );
+      return this.inputTitle && isPartialMatch; // Show message if there's input and it's a partial match
     },
   },
   methods: {
@@ -105,6 +128,69 @@ export default {
     loginSuccess() {
       this.loggedIn = true;
       console.log("Logged in successfully!"); // Log the success message
+    },
+    checkTitleAdd() {
+      const titleExists = this.books.some(book => book.title.toLowerCase() === this.inputTitle.toLowerCase());
+      const book = this.books.find(book => book.title.toLowerCase() === this.inputTitle.toLowerCase());
+      if (titleExists && book) {
+        console.log(`Stock count before click for "${book.title}": ${book.stockCount}`);
+        book.stockCount++; // Increment stock count
+        console.log(`Stock count after click for "${book.title}": ${book.stockCount}`);
+
+        // Prepare the stockcount object to send
+        const stockCountSend = {
+          title: book.title,
+          stockCount: book.stockCount // Updated stock count
+        };
+
+        // Create a fetch POST request
+        fetch('https://ivm108.informatik.htw-dresden.de/ewa/g14/daten/update_stock_admin.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(stockCountSend) // Send the stockcount object
+        })
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+      } else {
+        console.log('Book not found or title does not exist.');
+      }
+    },
+    checkTitleRemove() {
+      console.log(this.inputTitle);
+      const titleExists = this.books.some(book => book.title.toLowerCase() === this.inputTitle.toLowerCase());
+      const book = this.books.find(book => book.title.toLowerCase() === this.inputTitle.toLowerCase());
+      if (titleExists && book) {
+        // Stockcount - 1
+        // this.books.stockCount--;
+        if (book) {
+          console.log(`Stock count before click for "${book.title}": ${book.stockCount}`);
+          book.stockCount--;
+          console.log(`Stock count after click for "${book.title}": ${book.stockCount}`);
+
+          // Prepare the stockcount object to send
+          const stockCountSend = {
+            title: book.title,
+            stockCount: book.stockCount // Updated stock count
+          };
+
+          // Create a fetch POST request
+          fetch('https://ivm108.informatik.htw-dresden.de/ewa/g14/daten/reduceStockCount.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(stockCountSend) // Send the stockcount object
+          })
+              .then(response => response.text())
+              .then(data => console.log(data))
+              .catch(error => console.error('Error:', error));
+        } else {
+          console.log('Book not found or title does not exist.');
+        }
+      }
     },
     toggleShoppingCart() {
       this.showShoppingCart = !this.showShoppingCart;
@@ -252,6 +338,20 @@ export default {
 
 .loggedIn{
   text-align: left;
+}
+
+.input-group{
+  display: flex;
+  align-items: center;
+}
+
+.input-group .form-control {
+  flex-grow: 1; /* Input field takes the remaining space */
+  margin-right: 8px; /* Spacing between input and buttons */
+}
+.warning-message {
+  color: red;
+  /* Add more styles as needed */
 }
 
 .searchbar-container {}
