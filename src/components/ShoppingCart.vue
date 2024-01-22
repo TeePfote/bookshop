@@ -22,7 +22,7 @@
     </div>
     <div class="flex-row">
       <h3>Books: {{ bookCount }}</h3>
-      <h3>Total: {{ totalPrice }}$</h3>
+      <h3>Total: {{ totalPrice }}€</h3>
       <button class="btn btn-danger" @click="clearCart">Clear Cart</button>
       <button class="btn btn-primary" @click="redirectStripe">Checkout</button>
     </div>
