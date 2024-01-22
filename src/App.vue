@@ -24,7 +24,7 @@
         <!-- Show success message when logged in -->
         <div v-if="loggedIn">
           <h2>Logged in successfully!</h2>
-          <pre>{{ JSON.stringify(books, null, 2).slice(1, -1).replace(/"([^"]+)"/g, '$1').replace(/[{},]/g, '').replace(/,/g, ',\n') }}</pre>
+          <pre class="loggedIn">{{ JSON.stringify(books, null, 2).slice(1, -1).replace(/"([^"]+)"/g, '$1').replace(/[{},]/g, '').replace(/,/g, ',\n') }}</pre>
         </div>
         <!-- Conditionally render Book cards or Login component based on loggedIn property -->
         <book-card
@@ -248,6 +248,10 @@ export default {
 
 .h1 {
   margin: 0;
+}
+
+.loggedIn{
+  text-align: left;
 }
 
 .searchbar-container {}
