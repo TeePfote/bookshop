@@ -38,6 +38,14 @@
             </button>
           </div>
           <p v-if="showPartialTitleMessage" class="warning-message">Please enter the full book title.</p>
+          <div class="order-container">
+            <button class="btn btn-sm btn-success" @click="showOrders">Show Orders</button>
+            <div v-if="showOrdersList" class="orders-container">
+              <pre
+                  class="loggedIn">{{ JSON.stringify(orders, null, 2).slice(1, -1).replace(/"([^"]+)"/g, '$1').replace(/[{},]/g, '').replace(/,/g, ',\n') }}</pre>
+            </div>
+
+          </div>
           <p>Here are the books:</p>
           <pre
             class="loggedIn">{{ JSON.stringify(books, null, 2).slice(1, -1).replace(/"([^"]+)"/g, '$1').replace(/[{},]/g, '').replace(/,/g, ',\n') }}</pre>
@@ -80,6 +88,8 @@ export default {
       login: false, // Add loggedIn property
       loggedIn: false,
       inputTitle: "",
+      showOrdersList: false,
+      orders: [], // orders from JSON file
     };
   },
   mounted() {
@@ -176,6 +186,17 @@ export default {
             .catch(error => console.error('Error:', error));
         } else {
           console.log('Book not found or title does not exist.');
+        }
+      }
+    },
+    async showOrders() {
+      this.showOrdersList = !this.showOrdersList; // Toggle the visibility of orders
+      if (this.showOrdersList) {
+        try {
+          const response = await fetch('https://ivm108.informatik.htw-dresden.de/ewa/g14/daten/db_connection_orders.php'); // Corrected URL
+          this.orders = await response.json();
+        } catch (error) {
+          console.error('Error importing orders:', error);
         }
       }
     },
@@ -336,14 +357,15 @@ export default {
 
 .input-group .form-control {
   flex-grow: 1;
-  /* Input field takes the remaining space */
-  margin-right: 8px;
-  /* Spacing between input and buttons */
+  margin: 5px;
 }
 
 .warning-message {
   color: red;
-  /* Add more styles as needed */
+}
+
+.order-container{
+  /* flex-grow: 1;*/
 }
 
 .searchbar-container {}
