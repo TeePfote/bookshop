@@ -25,7 +25,7 @@
         <div class="loggedIn-container" v-if="loggedIn">
           <h2>Logged in successfully!</h2>
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="Title" v-model="inputTitle"/>
+            <input type="text" class="form-control" placeholder="Title" v-model="inputTitle" />
             <button class="btn btn-sm btn-danger" @click="checkTitleRemove(inputTitle)">
               <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M19 13H5v-2h14v2z" />
@@ -39,33 +39,20 @@
           </div>
           <p v-if="showPartialTitleMessage" class="warning-message">Please enter the full book title.</p>
           <p>Here are the books:</p>
-          <pre class="loggedIn">{{ JSON.stringify(books, null, 2).slice(1, -1).replace(/"([^"]+)"/g, '$1').replace(/[{},]/g, '').replace(/,/g, ',\n') }}</pre>
+          <pre
+            class="loggedIn">{{ JSON.stringify(books, null, 2).slice(1, -1).replace(/"([^"]+)"/g, '$1').replace(/[{},]/g, '').replace(/,/g, ',\n') }}</pre>
         </div>
         <!-- Conditionally render Book cards or Login component based on loggedIn property -->
-        <book-card
-            v-if="!login && !loggedIn"
-            v-for="(title, index) in filteredBookTitles"
-            :key="index"
-            :title="title.title"
-            :description="title.description"
-            :image-src="title.imageSrc"
-            :price="title.price"
-            :priceID="title.priceID"
-            @add-to-cart="addToCart" />
-        <login
-            v-else-if="login && !loggedIn"
-            @login-success="loginSuccess" />
+        <book-card v-if="!login && !loggedIn" v-for="(title, index) in filteredBookTitles" :key="index"
+          :title="title.title" :description="title.description" :image-src="title.imageSrc" :price="title.price"
+          :priceID="title.priceID" @add-to-cart="addToCart" />
+        <login v-else-if="login && !loggedIn" @login-success="loginSuccess" />
       </div>
     </div>
     <!-- Shopping Cart -->
     <div class="cart-container">
-      <shopping-cart
-          :items="cartItems"
-          v-if="showShoppingCart && !login && !loggedIn"
-          @clear-cart="clearCart"
-          @increment-count="incrementCount"
-          @decrement-count="decrementCount"
-          @redirect-stripe="redirectStripe" />
+      <shopping-cart :items="cartItems" v-if="showShoppingCart && !login && !loggedIn" @clear-cart="clearCart"
+        @increment-count="incrementCount" @decrement-count="decrementCount" @redirect-stripe="redirectStripe" />
     </div>
   </div>
 </template>
@@ -107,8 +94,8 @@ export default {
     },
     showPartialTitleMessage() {
       const isPartialMatch = this.books.some(book =>
-          book.title.toLowerCase().includes(this.inputTitle.toLowerCase()) &&
-          this.inputTitle.toLowerCase() !== book.title.toLowerCase()
+        book.title.toLowerCase().includes(this.inputTitle.toLowerCase()) &&
+        this.inputTitle.toLowerCase() !== book.title.toLowerCase()
       );
       return this.inputTitle && isPartialMatch; // Show message if there's input and it's a partial match
     },
@@ -151,9 +138,9 @@ export default {
           },
           body: JSON.stringify(stockCountSend) // Send the stockcount object
         })
-            .then(response => response.text())
-            .then(data => console.log(data))
-            .catch(error => console.error('Error:', error));
+          .then(response => response.text())
+          .then(data => console.log(data))
+          .catch(error => console.error('Error:', error));
       } else {
         console.log('Book not found or title does not exist.');
       }
@@ -177,16 +164,16 @@ export default {
           };
 
           // Create a fetch POST request
-          fetch('https://ivm108.informatik.htw-dresden.de/ewa/g14/daten/reduceStockCount.php', {
+          fetch('https://ivm108.informatik.htw-dresden.de/ewa/g14/daten/update_stock_admin.php', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify(stockCountSend) // Send the stockcount object
           })
-              .then(response => response.text())
-              .then(data => console.log(data))
-              .catch(error => console.error('Error:', error));
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
         } else {
           console.log('Book not found or title does not exist.');
         }
@@ -270,10 +257,12 @@ export default {
         )
       );
       console.log(this.cartItems);
-      books = books.map(({ priceID, quantity }) => ({ priceID, quantity }));
+      books = books.map(({ priceID, price, quantity, title }) => ({ priceID, price, quantity, title }));
       books = books.map(item => ({
         priceID: Object.values(item)[0],
-        quantity: Object.values(item)[1],
+        price: Object.values(item)[1],
+        quantity: Object.values(item)[2],
+        title: Object.values(item)[3],
       }));
       console.log(books);
       const payload = encodeURIComponent(JSON.stringify(books));
@@ -336,19 +325,22 @@ export default {
   margin: 0;
 }
 
-.loggedIn{
+.loggedIn {
   text-align: left;
 }
 
-.input-group{
+.input-group {
   display: flex;
   align-items: center;
 }
 
 .input-group .form-control {
-  flex-grow: 1; /* Input field takes the remaining space */
-  margin-right: 8px; /* Spacing between input and buttons */
+  flex-grow: 1;
+  /* Input field takes the remaining space */
+  margin-right: 8px;
+  /* Spacing between input and buttons */
 }
+
 .warning-message {
   color: red;
   /* Add more styles as needed */
